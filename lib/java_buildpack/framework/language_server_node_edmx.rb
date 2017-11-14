@@ -10,21 +10,21 @@ require 'java_buildpack/logging/logger_factory'
 module JavaBuildpack
   module Framework
 
-    # Installs ESLINT based LSP server component.
-    class LanguageServerNodeESLINT < JavaBuildpack::Component::VersionedDependencyComponent
+    # Installs EDMX based LSP server component.
+    class LanguageServerNodeEDMX < JavaBuildpack::Component::VersionedDependencyComponent
 
       # Creates an instance
       #
       # @param [Hash] context a collection of utilities used the component
       def initialize(context)
         super(context)
-        @logger = JavaBuildpack::Logging::LoggerFactory.instance.get_logger LanguageServerNodeESLINT
+        @logger = JavaBuildpack::Logging::LoggerFactory.instance.get_logger LanguageServerNodeEDMX
       end
 
 
       # (see JavaBuildpack::Component::BaseComponent#compile)
       def compile
-        @logger.debug { "Compile ESLINT" }
+        @logger.debug { "Compile EDMX" }
         # Install node js
         FileUtils.mkdir_p @droplet.root + "nodejs"
         nodedir = @droplet.sandbox + "nodejs"
@@ -43,7 +43,7 @@ module JavaBuildpack
       # (see JavaBuildpack::Component::BaseComponent#release)
       def release
 
-        @logger.debug { "Release ESLINT" }
+        @logger.debug { "Release EDMX" }
         environment_variables = @droplet.environment_variables
         myWorkdir = @configuration["env"]["workdir"]
         environment_variables.add_environment_variable(ENV_PREFIX + "workdir", myWorkdir)
@@ -51,7 +51,7 @@ module JavaBuildpack
         environment_variables.add_environment_variable(ENV_PREFIX + "exec", myExec)
         
         myIpc = @configuration["env"]["ipc"]
-        @logger.debug { "ESLINT Env vars IPC:#{myIpc}" }
+        @logger.debug { "EDMX Env vars IPC:#{myIpc}" }
         myIpc.each do |key, value|
           environment_variables.add_environment_variable(ENV_PREFIX + key, value)
         end
@@ -63,7 +63,7 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::VersionedDependencyComponent#supports?)
       def supports?
-        @application.environment.key?(LSPSERVERS) &&  @application.environment[LSPSERVERS].split(',').include?("eslint")
+        @application.environment.key?(LSPSERVERS) &&  @application.environment[LSPSERVERS].split(',').include?("edmx")
       end
 
       private
@@ -76,7 +76,7 @@ module JavaBuildpack
 
       private_constant :BINEXEC
 
-      ENV_PREFIX = 'LSPESLINT_'.freeze
+      ENV_PREFIX = 'LSPEDMX_'.freeze
 
       private_constant :ENV_PREFIX
 
